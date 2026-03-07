@@ -1,9 +1,10 @@
 <#
 .SYNOPSIS
-    VISIONGAIATECHNOLOGY - CIVILIAN SYSTEM AUDIT v2.0 (PLATINUM EDITION)
+    VISIONGAIATECHNOLOGY - CIVILIAN SYSTEM AUDIT v2.2 (PLATINUM VGT SUPREME)
 .DESCRIPTION
     Architektur: Modular, Type-Safe, Deterministisch.
-    Zweck: Open-Source Baseline-Check für zivile Windows-Endpunkte.
+    Zweck: Erweiterter Open-Source Baseline-Check für zivile Windows-Endpunkte.
+    Vektoren: Firewall, Defender, Telemetry, UAC, Encryption (BitLocker/VeraCrypt), Updates.
 #>
 [CmdletBinding()]
 param()
@@ -13,7 +14,7 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
 # ==============================================================================
-# 1. KERNEL & UI ENGINE
+# 1. KERNEL & UI ENGINE (VGT STATE OF THE ART)
 # ==============================================================================
 class VGTThermalEngine {
     static [string] $E = [char]27
@@ -32,35 +33,37 @@ class VGTThermalEngine {
         Write-Host "  | | | | |  _  | |    \___ \| | | | '_ \| '__/ _ \ '_ ` _ \ / _ \"
         Write-Host "   \ \_/ / |_| | | |     ___) | |_| | |_) | | |  __/ | | | | |  __/"
         Write-Host "    \___/ \____| |_|    |____/ \__,_| .__/|_|  \___|_| |_| |_|\___|"
-        Write-Host "                                    |_| CIVILIAN AUDIT v2.0 $([VGTThermalEngine]::Reset)"
+        Write-Host "                                    |_| CIVILIAN AUDIT v2.2 $([VGTThermalEngine]::Reset)"
         Write-Host "================================================================================"
+        Write-Host " [!] WARNUNG: Dieser Scan bewertet die Widerstandsfähigkeit gegen Angriffe."
+        Write-Host " [!] Ein Score von 0% ist bei Standard-Installationen die Regel, nicht die Ausnahme."
     }
 }
 
 # ==============================================================================
-# 2. AUDIT MODULE (ISOLIERTE VEKTOREN)
+# 2. AUDIT MODULE (EXPANDED VECTORS)
 # ==============================================================================
 
 function Invoke-VGTFirewallAudit {
     [OutputType([int])]
     param()
-    Write-Host "`n$([VGTThermalEngine]::Hdr)[1] ANALYSIERE NETZWERK-EXPOSITION...$([VGTThermalEngine]::Reset)"
+    Write-Host "`n$([VGTThermalEngine]::Hdr)[1] NETZWERK-EXPOSITION$([VGTThermalEngine]::Reset)"
     
     [int]$scoreYield = 0
     try {
         [int]$InboundAllow = @(Get-NetFirewallRule -Enabled True -Direction Inbound -Action Allow -ErrorAction Stop).Count
         
         if ($InboundAllow -le 15) { 
-            $scoreYield = 30 
+            $scoreYield = 20 
             Write-Host "  [-] Offene Inbound-Rules        : $InboundAllow $([VGTThermalEngine]::Ok)[STRENG VERSCHLOSSEN]$([VGTThermalEngine]::Reset)"
         } elseif ($InboundAllow -le 45) {
-            $scoreYield = 15
+            $scoreYield = 10
             Write-Host "  [-] Offene Inbound-Rules        : $InboundAllow $([VGTThermalEngine]::Warn)[GEFÄHRDET]$([VGTThermalEngine]::Reset)"
         } else { 
             Write-Host "  [-] Offene Inbound-Rules        : $InboundAllow $([VGTThermalEngine]::Crit)[TOTAL-EXPOSITION]$([VGTThermalEngine]::Reset)" 
         }
     } catch {
-        Write-Host "  [-] Firewall Audit              : $([VGTThermalEngine]::Crit)[FEHLER: ZUGRIFF VERWEIGERT / DIENST OFFLINE]$([VGTThermalEngine]::Reset)"
+        Write-Host "  [-] Firewall Audit              : $([VGTThermalEngine]::Crit)[API-ERROR]$([VGTThermalEngine]::Reset)"
     }
     return $scoreYield
 }
@@ -68,7 +71,7 @@ function Invoke-VGTFirewallAudit {
 function Invoke-VGTDefenderAudit {
     [OutputType([int])]
     param()
-    Write-Host "`n$([VGTThermalEngine]::Hdr)[2] ANALYSIERE HEURISTIK & SCHUTZ-SYSTEME...$([VGTThermalEngine]::Reset)"
+    Write-Host "`n$([VGTThermalEngine]::Hdr)[2] HEURISTIK & SCHUTZ-SYSTEME$([VGTThermalEngine]::Reset)"
     
     [int]$scoreYield = 0
     try {
@@ -76,13 +79,13 @@ function Invoke-VGTDefenderAudit {
         [int]$ASR_Count = @($MP.AttackSurfaceReductionRules_Ids | Select-Object -Unique).Count
 
         if ($MP.CloudBlockLevel -ge 2) { 
-            $scoreYield += 15; Write-Host "  [-] Cloud-Intelligenz           : $([VGTThermalEngine]::Ok)[AKTIV]$([VGTThermalEngine]::Reset)" 
+            $scoreYield += 10; Write-Host "  [-] Cloud-Intelligenz           : $([VGTThermalEngine]::Ok)[AKTIV]$([VGTThermalEngine]::Reset)" 
         } else { 
             Write-Host "  [-] Cloud-Intelligenz           : $([VGTThermalEngine]::Crit)[PASSIV]$([VGTThermalEngine]::Reset)" 
         }
 
         if ($MP.EnableControlledFolderAccess -eq 1) { 
-            $scoreYield += 15; Write-Host "  [-] Anti-Ransomware (CFA)       : $([VGTThermalEngine]::Ok)[AKTIV]$([VGTThermalEngine]::Reset)" 
+            $scoreYield += 10; Write-Host "  [-] Anti-Ransomware (CFA)       : $([VGTThermalEngine]::Ok)[AKTIV]$([VGTThermalEngine]::Reset)" 
         } else { 
             Write-Host "  [-] Anti-Ransomware (CFA)       : $([VGTThermalEngine]::Crit)[AUS]$([VGTThermalEngine]::Reset)" 
         }
@@ -90,7 +93,7 @@ function Invoke-VGTDefenderAudit {
         if ($ASR_Count -ge 10) { 
             $scoreYield += 10; Write-Host "  [-] ASR-Kernel-Regeln           : $([VGTThermalEngine]::Ok)[GEHÄRTET]$([VGTThermalEngine]::Reset) ($ASR_Count/16)" 
         } else { 
-            Write-Host "  [-] ASR-Kernel-Regeln           : $([VGTThermalEngine]::Crit)[DEAKTIVIERT]$([VGTThermalEngine]::Reset) ($ASR_Count/16)" 
+            Write-Host "  [-] ASR-Kernel-Regeln           : $([VGTThermalEngine]::Crit)[INAKTIV]$([VGTThermalEngine]::Reset) ($ASR_Count/16)" 
         }
     } catch {
         Write-Host "  [-] Defender Audit              : $([VGTThermalEngine]::Crit)[SYSTEM-API NICHT ERREICHBAR]$([VGTThermalEngine]::Reset)"
@@ -98,23 +101,80 @@ function Invoke-VGTDefenderAudit {
     return $scoreYield
 }
 
-function Invoke-VGTTelemetryAudit {
+function Invoke-VGTIdentityAudit {
     [OutputType([int])]
     param()
-    Write-Host "`n$([VGTThermalEngine]::Hdr)[3] ANALYSIERE DATEN-ABFLUSS (TELEMETRIE)...$([VGTThermalEngine]::Reset)"
+    Write-Host "`n$([VGTThermalEngine]::Hdr)[3] IDENTITÄT & PRIVILEGIEN$([VGTThermalEngine]::Reset)"
     
     [int]$scoreYield = 0
     try {
-        $DiagTrack = Get-Service -Name "DiagTrack" -ErrorAction Stop
-        if ($DiagTrack.StartType -eq "Disabled") { 
-            $scoreYield = 30; Write-Host "  [-] Windows Überwachung         : $([VGTThermalEngine]::Ok)[PHYSISCH GESTOPPT]$([VGTThermalEngine]::Reset)" 
+        # Check UAC Level (ConsentPromptBehaviorAdmin: 0 = No, 5 = Highest)
+        $UAC = Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "ConsentPromptBehaviorAdmin"
+        if ($UAC.ConsentPromptBehaviorAdmin -eq 2 -or $UAC.ConsentPromptBehaviorAdmin -eq 5) {
+            $scoreYield += 10; Write-Host "  [-] Benutzerkontensteuerung     : $([VGTThermalEngine]::Ok)[STRIKT]$([VGTThermalEngine]::Reset)"
+        } else {
+            Write-Host "  [-] Benutzerkontensteuerung     : $([VGTThermalEngine]::Crit)[SCHWACH]$([VGTThermalEngine]::Reset)"
+        }
+    } catch {
+        Write-Host "  [-] Identity Audit              : $([VGTThermalEngine]::Crit)[REGISTRY-ERROR]$([VGTThermalEngine]::Reset)"
+    }
+    return $scoreYield
+}
+
+function Invoke-VGTStorageAudit {
+    [OutputType([int])]
+    param()
+    Write-Host "`n$([VGTThermalEngine]::Hdr)[4] DATEN-VERSCHLÜSSELUNG$([VGTThermalEngine]::Reset)"
+    
+    [int]$scoreYield = 0
+    [bool]$protected = $false
+    [string]$method = ""
+
+    # Vektor A: BitLocker (Nativ)
+    try {
+        $BL = Get-BitLockerVolume -MountPoint "C:" -ErrorAction SilentlyContinue
+        if ($null -ne $BL -and $BL.ProtectionStatus -eq 'On') {
+            $protected = $true
+            $method = "BitLocker"
+        }
+    } catch {}
+
+    # Vektor B: VeraCrypt (Third-Party / Forensic Shield)
+    if (-not $protected) {
+        try {
+            $VCProc = Get-Process "VeraCrypt" -ErrorAction SilentlyContinue
+            $VCDriver = Get-Service "veracrypt" -ErrorAction SilentlyContinue
+            if ($null -ne $VCProc -or $null -ne $VCDriver) {
+                $protected = $true
+                $method = "VeraCrypt"
+            }
+        } catch {}
+    }
+
+    if ($protected) {
+        $scoreYield = 20
+        Write-Host "  [-] Verschlüsselung ($method)    : $([VGTThermalEngine]::Ok)[AKTIV]$([VGTThermalEngine]::Reset)"
+    } else {
+        Write-Host "  [-] Verschlüsselung             : $([VGTThermalEngine]::Crit)[INAKTIV]$([VGTThermalEngine]::Reset)"
+    }
+    return $scoreYield
+}
+
+function Invoke-VGTTelemetryAudit {
+    [OutputType([int])]
+    param()
+    Write-Host "`n$([VGTThermalEngine]::Hdr)[5] PRIVATSPHÄRE & TELEMETRIE$([VGTThermalEngine]::Reset)"
+    
+    [int]$scoreYield = 0
+    try {
+        $DiagTrack = Get-Service -Name "DiagTrack" -ErrorAction SilentlyContinue
+        if ($null -eq $DiagTrack -or $DiagTrack.StartType -eq "Disabled") { 
+            $scoreYield = 20; Write-Host "  [-] Windows Überwachung         : $([VGTThermalEngine]::Ok)[GESTOPPT]$([VGTThermalEngine]::Reset)" 
         } else { 
             Write-Host "  [-] Windows Überwachung         : $([VGTThermalEngine]::Crit)[AKTIV (DATENABFLUSS)]$([VGTThermalEngine]::Reset)" 
         }
     } catch {
-        # Wenn der Dienst physisch gelöscht wurde (VGT Omega Verhalten), werten wir es als sicher.
-        $scoreYield = 30
-        Write-Host "  [-] Windows Überwachung         : $([VGTThermalEngine]::Ok)[DIENST ELIMINIERT]$([VGTThermalEngine]::Reset)"
+        $scoreYield = 20; Write-Host "  [-] Windows Überwachung         : $([VGTThermalEngine]::Ok)[ELIMINIERT]$([VGTThermalEngine]::Reset)"
     }
     return $scoreYield
 }
@@ -127,6 +187,8 @@ function Invoke-VGTTelemetryAudit {
 [int]$TotalScore = 0
 $TotalScore += Invoke-VGTFirewallAudit
 $TotalScore += Invoke-VGTDefenderAudit
+$TotalScore += Invoke-VGTIdentityAudit
+$TotalScore += Invoke-VGTStorageAudit
 $TotalScore += Invoke-VGTTelemetryAudit
 
 # SCORE RENDERING
@@ -146,10 +208,10 @@ if ($TotalScore -ge 90) {
 } else {
     Write-Host "`n STATUS: KRITISCH - SYSTEM KOMPROMMITTIERT! 🔥💀" -ForegroundColor Red
     Write-Host "--------------------------------------------------------------------------------"
-    Write-Host " FATAL: Ihr System ist ein Sicherheitsrisiko für Sie und Dritte." -ForegroundColor Red
-    Write-Host " Ein Score von $TotalScore% bedeutet: Die Systemarchitektur bietet null Widerstand." -ForegroundColor Red
-    Write-Host " Jeder Hacker kann diesen PC als Pivot-Punkt für das Netzwerk nutzen." -ForegroundColor Red
-    Write-Host " Erwägen Sie ein professionelles VGT-Audit: https://visiongaiatechnology.de" -ForegroundColor DarkGray
+    Write-Host " ANALYSE: Ihr System befindet sich im Auslieferungszustand." -ForegroundColor Red
+    Write-Host " Es gibt keinen wirksamen Schutz gegen moderne Ransomware oder Exploit-Ketten." -ForegroundColor Red
+    Write-Host " Jeder Score unter 40% bedeutet: Sie arbeiten auf einer 'Open Shell'." -ForegroundColor Red
+    Write-Host " VGT Empfehlung: Omega Hardening Protocol einleiten." -ForegroundColor DarkGray
 }
 
 Write-Host "================================================================================"
