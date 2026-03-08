@@ -101,7 +101,7 @@ Dies ist unsere **öffentliche Basisversion**. Sie zeigt dir wo du stehst.
 
 | Feature | Civilian v2.2 | SafetySys™ V19.6 |
 |---------|:---:|:---:|
-| Sicherheitsvektoren | 5 | **220** |
+| Sicherheitsvektoren | 5 | **38** |
 | Angriffskategorien | 5 | **9** |
 | MITRE ATT&CK Mapping | ❌ | ✅ |
 | Zertifikatsexport | ❌ | ✅ |
