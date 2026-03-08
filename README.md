@@ -14,12 +14,12 @@
 
 [![Made by VisionGaiaTechnology](https://img.shields.io/badge/Made%20by-VisionGaiaTechnology-00d4ff?style=for-the-badge&logo=shield&logoColor=white)](https://visiongaiatechnology.de)
 [![PowerShell](https://img.shields.io/badge/PowerShell-5.1%2B-blue?style=for-the-badge&logo=powershell&logoColor=white)](https://github.com/PowerShell/PowerShell)
-[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+[![License](https://img.shields.io/badge/License-AGPLv3-green?style=for-the-badge)](LICENSE)
 [![Open Source](https://img.shields.io/badge/Open%20Source-Yes-brightgreen?style=for-the-badge&logo=github)](https://github.com/VisionGaiaTechnology)
 
 ---
 
-<a href="https://www.paypal.com/donate/?hosted_button_id=DEIN_BUTTON_ID">
+<a href="https://www.paypal.com/paypalme/dergoldenelotus">
   <img src="https://img.shields.io/badge/☕%20Support%20VGT-PayPal%20Donate-00457C?style=for-the-badge&logo=paypal&logoColor=white" alt="Donate with PayPal" height="45"/>
 </a>
 &nbsp;&nbsp;
@@ -130,7 +130,7 @@ Dieser Scanner ist **kostenlos und Open Source**. Wenn er dir geholfen hat:
 
 <div align="center">
 
-<a href="https://www.paypal.com/donate/?hosted_button_id=DEIN_BUTTON_ID">
+<a href="https://www.paypal.com/paypalme/dergoldenelotus">
   <img src="https://img.shields.io/badge/PayPal-Support%20VisionGaiaTechnology-00457C?style=for-the-badge&logo=paypal&logoColor=white" height="45"/>
 </a>
 
@@ -142,7 +142,7 @@ Dieser Scanner ist **kostenlos und Open Source**. Wenn er dir geholfen hat:
 
 ## 📄 Lizenz
 
-MIT License · © 2026 VisionGaia Technology · Köln, Deutschland
+AGPLv3 License · © 2026 VisionGaia Technology · Köln, Deutschland
 
 ---
 
