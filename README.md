@@ -108,7 +108,6 @@ Dies ist unsere **öffentliche Basisversion**. Sie zeigt dir wo du stehst.
 | Kernel BCD Protection | ❌ | ✅ |
 | Memory Scrambling | ❌ | ✅ |
 | DNSSEC Validation | ❌ | ✅ |
-| PQC Verschlüsselung | ❌ | ✅ |
 | Tier-Zertifikat (CIVIC→SOVEREIGN) | ❌ | ✅ |
 | Preis | **Kostenlos** | **Ab 490€** |
 
